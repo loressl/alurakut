@@ -16,7 +16,7 @@ Projeto desenvolvido durante a 3ª edição da Imersão React promovida pela [Al
 ```bash
 yarn install
 # ou
-npm intall
+npm install
 ```
 
 ## Executar projeto
