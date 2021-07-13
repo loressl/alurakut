@@ -1,6 +1,6 @@
 ![Logo](screens/Alurakut.png)
 
-## Imersão React 3a edição 
+## Imersão React 3ª edição 
 
 Projeto desenvolvido durante a 3ª edição da Imersão React promovida pela [Alura](https://www.alura.com.br/).
 
