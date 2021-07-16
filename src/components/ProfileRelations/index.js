@@ -62,8 +62,8 @@ export const ProfileRelationsBoxWrapper = (props) => {
         {items.map((itemAtual) => {
           return (
             <li key={itemAtual.id}>
-              <a href={`/users/${itemAtual.title}`}>
-                <img src={itemAtual.image} />
+              <a href={`/communities/${itemAtual.title}`}>
+                <img src={itemAtual.imageUrl} />
                 <span>{itemAtual.title}</span>
               </a>
             </li>

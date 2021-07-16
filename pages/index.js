@@ -48,11 +48,7 @@ function ProfileSideBar(props) {
 export default function Home() {
   const githubUser = 'loressl';
 
-  const [comunidades, setComunidades] = React.useState([{
-    id: '12802378123789378912789789123896123',
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-  }]);
+  const [comunidades, setComunidades] = React.useState([]);
 
   const pessoasFavoritas = [
     'juunegreiros',
@@ -65,12 +61,35 @@ export default function Home() {
 
   const [seguidores, setSeguidores] = React.useState([]);
   React.useEffect(function () {
-    fetch('https://api.github.com/users/loressl/followers')
+    fetch(process.env.NEXT_PUBLIC_MY_FOLLOWERS)
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
       .then(function (respostaCompleta) {
         setSeguidores(respostaCompleta);
+      })
+
+    fetch(process.env.NEXT_PUBLIC_URL_DATOCMS, {
+      method: 'POST',
+      headers: {
+        'Authorization': process.env.NEXT_PUBLIC_TOKEN,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        "query": `query {
+          allCommunities {
+            id 
+            title
+            imageUrl
+            creatorSlug
+          }
+        }` })
+    })
+      .then((response) => response.json()) // Pega o retorno do response.json() e já retorna
+      .then((respostaCompleta) => {
+        const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
+        setComunidades(comunidadesVindasDoDato)
       })
   }, [])
 
@@ -95,12 +114,24 @@ export default function Home() {
               e.preventDefault();
               const dadosDoForm = new FormData(e.target);
               const comunidade = {
-                id: new Date().toISOString(),
                 title: dadosDoForm.get('title'),
-                image: dadosDoForm.get('image'),
+                imageUrl: dadosDoForm.get('image'),
+                creatorSlug: githubUser
               }
-              const comunidadesAtualizadas = [...comunidades, comunidade];
-              setComunidades(comunidadesAtualizadas)
+              fetch('/api/comunidades', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(comunidade)
+              })
+                .then(async (response) => {
+                  const dados = await response.json();
+                  //console.log(dados.registroCriado);
+                  const comunidade = dados.registroCriado;
+                  const comunidadesAtualizadas = [...comunidades, comunidade];
+                  setComunidades(comunidadesAtualizadas)
+                })
             }}>
               <div>
                 <input
