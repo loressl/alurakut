@@ -206,7 +206,10 @@ export default function Home(props) {
 export async function getServerSideProps(ctx) {
   const cookies = nookies.get(ctx);
   const token = cookies.USER_TOKEN;
-  const { githubUser } = jwt.decode(token);
+  let githubUser = '';
+  if (token !== undefined) {
+    githubUser = jwt.decode(token).githubUser;
+  }
 
   //https://alurakut.vercel.app/api/auth <<< sempre retorna true e está dando erro
 
