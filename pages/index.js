@@ -63,7 +63,7 @@ export default function Home(props) {
 
   const [seguidores, setSeguidores] = React.useState([]);
   React.useEffect(function () {
-    fetch(`${process.env.NEXT_PUBLIC_MY_FOLLOWERS}/${githubUser}/followers`)
+    fetch(`https://api.github.com/users/${githubUser}/followers`)
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
@@ -71,10 +71,10 @@ export default function Home(props) {
         setSeguidores(respostaCompleta);
       })
 
-    fetch(process.env.NEXT_PUBLIC_URL_DATOCMS, {
+    fetch('https://graphql.datocms.com/', {
       method: 'POST',
       headers: {
-        'Authorization': process.env.NEXT_PUBLIC_TOKEN,
+        'Authorization': 'c40b9455c18a4fc888f8408042e4e0',
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
