@@ -4,6 +4,7 @@ import Box from "../src/components/Box";
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper, ProfileRelations } from '../src/components/ProfileRelations';
 import nookies from 'nookies';
+import { isEmpty } from 'lodash';
 
 import jwt from 'jsonwebtoken';
 
@@ -207,7 +208,7 @@ export async function getServerSideProps(ctx) {
   const cookies = nookies.get(ctx);
   const token = cookies.USER_TOKEN;
   let githubUser = '';
-  if (token !== undefined) {
+  if (!isEmpty(token)) {
     githubUser = jwt.decode(token).githubUser;
   }
 
