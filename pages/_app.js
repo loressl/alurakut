@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: #B2CFF4;
+    background-color: #CCDFF8;
     background-image:linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,.3) 1px, transparent 1px);
 background-size: 50px 50px, 10px 30px;
     font-family: sans-serif;

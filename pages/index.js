@@ -2,7 +2,10 @@ import React from 'react';
 import MainGrid from "../src/components/MainGrind";
 import Box from "../src/components/Box";
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from '../src/lib/AlurakutCommons';
-import { ProfileRelationsBoxWrapper, ProfileRelations, ProfileRelationsBoxUsers } from '../src/components/ProfileRelations';
+import { ProfileRelationsBoxWrapper, ProfileRelations } from '../src/components/ProfileRelations';
+import nookies from 'nookies';
+
+import jwt from 'jsonwebtoken';
 
 function ProfileSideBar(props) {
   return (
@@ -45,9 +48,8 @@ function ProfileSideBar(props) {
 //   )
 // }
 
-export default function Home() {
-  const githubUser = 'loressl';
-
+export default function Home(props) {
+  const githubUser = props.githubUser;
   const [comunidades, setComunidades] = React.useState([]);
 
   const pessoasFavoritas = [
@@ -61,7 +63,7 @@ export default function Home() {
 
   const [seguidores, setSeguidores] = React.useState([]);
   React.useEffect(function () {
-    fetch(process.env.NEXT_PUBLIC_MY_FOLLOWERS)
+    fetch(`${process.env.NEXT_PUBLIC_MY_FOLLOWERS}/${githubUser}/followers`)
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
@@ -199,4 +201,38 @@ export default function Home() {
       </MainGrid>
     </>
   )
+}
+
+export async function getServerSideProps(ctx) {
+  const cookies = nookies.get(ctx);
+  const token = cookies.USER_TOKEN;
+  const { githubUser } = jwt.decode(token);
+
+  //https://alurakut.vercel.app/api/auth <<< sempre retorna true e está dando erro
+
+  const status = await fetch(`https://api.github.com/users/${githubUser}`)
+    .then(async (resposta) => resposta.status)
+    .catch((err) => console.log(err))
+
+  if (status === 404) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+  // const followers = await fetch(`https://api.github.com/users/${githubUser}/followers`)
+  //   .then((res) => res.json())
+  //   .then(followers => followers.map((follower) => ({
+  //     id: follower.id,
+  //     name: follower.login,
+  //     image: follower.avatar_url,
+  //   })));
+
+  return {
+    props: {
+      githubUser,
+    }
+  }
 }
