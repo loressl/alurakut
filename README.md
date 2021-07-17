@@ -11,6 +11,7 @@ Projeto desenvolvido durante a 3ª edição da Imersão React promovida pela [Al
  - [React](https://reactjs.org)
  - [Next.JS](https://nextjs.org/)
  - [styled-components](https://styled-components.com/)
+ - [DatoCMS](https://www.datocms.com/)
 
 ## Instalação
 ```bash
